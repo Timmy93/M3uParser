@@ -9,20 +9,31 @@
 from M3uParser import M3uParser
 import configparser
 import subprocess
+import os
 
 #Rename all the file in this directory
-def renameAll(path):
-	#TODO
-	#Read all file in path
-	#For each file check if it has a name
-	#Rename with its name
-	print("Not implemented - rename all")
+def rename(src, dst, oldName, newName):
+	os.rename(src+oldName, dst+newName)
 
+#Downlad the file in a certain directory - Return True if correctly downloaded
 def startDownload(downloader, url, temp, completed):
-	#TODO
 	#Start the download of a certain file using an sh script
 	res = subprocess.run([downloader, url, temp, completed], stdout=subprocess.PIPE)
-	print("Result: "+str(res.returncode))
+	return res.returncode == 1
+
+#Get time elapsed between two time
+def time_in_range(start, end, x):
+    """Return true if x is in the range [start, end]"""
+    #Set time as datetime
+    h,m = start.split(":")
+    start = datetime.time(h, m, 0)
+    h,m = end.split(":")
+    end = datetime.time(h, m, 0)
+    #Start comparison
+    if start <= end:
+        return start <= x <= end
+    else:
+        return start <= x or x <= end
 
 def debugTypes(myFile):
 	old = ""
@@ -49,13 +60,16 @@ def main():
 	#Info for m3u file
 	url = config['Settings']['url']
 	filename = config['Settings']['filename']
-	#Info for renaming
+	#Info for download
 	temp_path = config['Download']['temp_path']
 	completed = config['Download']['completed']
 	downloader = config['Download']['downloader']
-	#Info for download
+	#Info for renaming
 	source_to_rename = config['Rename']['source_to_rename']
 	new_dir = config['Rename']['new_dir']
+	#Info for time range activity
+	start_time = config['Time']['start_time']
+	end_time = config['Time']['end_time']
 
 	#Start parser
 	myFile = M3uParser()
@@ -66,13 +80,21 @@ def main():
 	myFile.filterOutFilesOfGroupsContaining("Film Ultimi Inseriti Cam")
 	myFile.filterOutFilesOfGroupsContaining("3D")
 	
-	random = myFile.getRandomFile()
+	
 	#Debug
 	# ~ debugTypes(myFile)
 	
 	#TODO
 	# ~ renameAll(path)
-	startDownload(downloader, random["link"], temp_path, completed)
+	# ~ 
+	
+	#To debug!
+	while len(myFile.getList()) and time_in_range(start_time, end_time, datetime.now()):
+		#Extract file
+		random = myFile.getRandomFile()
+		#Download file
+		if startDownload(downloader, random["link"], temp_path, completed):
+			rename(source_to_rename, new_dir, random["titleFile"], random["title"])
 	
 	# ~ print(myFile.getCustomTitle("15373.mkv"))
 	

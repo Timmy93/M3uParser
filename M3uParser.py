@@ -99,4 +99,5 @@ class M3uParser:
 
 	#Return a random element
 	def getRandomFile(self):
-		return random.choice(self.files)
+		random.shuffle(self.files)
+		return self.files.pop()
