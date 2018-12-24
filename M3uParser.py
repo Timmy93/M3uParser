@@ -9,6 +9,7 @@
 import os
 import re
 import urllib.request
+import random
 
 class M3uParser:
 	
@@ -76,9 +77,26 @@ class M3uParser:
 		#TODO
 		print("Not implemented")
 	
-	def getNoStreaming(self):
-		return list(filter(lambda file: not file["titleFile"].endswith(".ts"), self.files))
+	#Remove files with a certain file extension
+	def filterOutFilesEndingWith(self, extension):
+		self.files = list(filter(lambda file: not file["titleFile"].endswith(extension), self.files))
 	
-	def getNoCamNoStreaming(self):
-		return list(filter(lambda file: "Cam" not in file["tvg-group"], self.getNoStreaming()))
+	#Remove files that contains a certain filterWord
+	def filterOutFilesOfGroupsContaining(self, filterWord):
+		self.files = list(filter(lambda file: filterWord not in file["tvg-group"], self.files))
 
+	#Getter for the list
+	def getList(self):
+		return self.files
+		
+	#Return the info assciated to a certain file name
+	def getCustomTitle(self, originalName):
+		result = list(filter(lambda file: file["titleFile"] == originalName, self.files))
+		if len(result):
+			return result
+		else:
+			print("No file corresponding to: "+originalName)
+
+	#Return a random element
+	def getRandomFile(self):
+		return random.choice(self.files)
