@@ -90,7 +90,7 @@ def main():
 	# ~ 
 	
 	#To debug!
-	while len(myFile.getList()) and time_in_range(start_time, end_time, datetime.now()):
+	while len(myFile.getList()) and time_in_range(start_time, end_time, datetime.datetime.now()):
 		#Extract file
 		random = myFile.getRandomFile()
 		#Download file
