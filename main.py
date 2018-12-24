@@ -23,8 +23,12 @@ def startDownload(downloader, url, temp, completed):
 	return res.returncode == 1
 
 #Get time elapsed between two time
-def time_in_range(start, end, x):
+def time_in_range(start, end):
     """Return true if x is in the range [start, end]"""
+    now = datetime.datetime.now()
+    h = now.hour
+    m = now.minute
+    x = datetime.time(int(h), int(m), 0)
     #Set time as datetime
     h,m = start.split(":")
     start = datetime.time(int(h), int(m), 0)
@@ -90,7 +94,7 @@ def main():
 	# ~ 
 	
 	#To debug!
-	while len(myFile.getList()) and time_in_range(start_time, end_time, datetime.datetime.now()):
+	while len(myFile.getList()) and time_in_range(start_time, end_time):
 		#Extract file
 		random = myFile.getRandomFile()
 		#Download file
