@@ -43,4 +43,4 @@ htmlcov/
 *.ini
 
 #M3u Files
-*.m3u
+#*.m3u
