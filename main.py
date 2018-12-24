@@ -27,9 +27,9 @@ def time_in_range(start, end, x):
     """Return true if x is in the range [start, end]"""
     #Set time as datetime
     h,m = start.split(":")
-    start = datetime.time(h, m, 0)
+    start = datetime.time(int(h), int(m), 0)
     h,m = end.split(":")
-    end = datetime.time(h, m, 0)
+    end = datetime.time(int(h), int(m), 0)
     #Start comparison
     if start <= end:
         return start <= x <= end
