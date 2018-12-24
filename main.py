@@ -14,7 +14,8 @@ import datetime
 
 #Rename all the file in this directory
 def rename(src, dst, oldName, newName):
-	os.rename(src+oldName, dst+newName)
+	filename, file_extension = os.path.splitext(oldName)
+	os.rename(src+oldName, dst+newName+file_extension)
 
 #Downlad the file in a certain directory - Return True if correctly downloaded
 def startDownload(downloader, url, temp, completed):
