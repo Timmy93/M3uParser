@@ -94,14 +94,19 @@ def main():
 	# ~ renameAll(path)
 	# ~ 
 	
-	#To debug!
-	while len(myFile.getList()) and time_in_range(start_time, end_time):
+	fileLeft = len(myFile.getList())
+	correctTimeRange = time_in_range(start_time, end_time)
+	while fileLeft and correctTimeRange:
 		#Extract file
 		random = myFile.getRandomFile()
 		#Download file
 		if startDownload(downloader, random["link"], temp_path, completed):
 			rename(source_to_rename, new_dir, random["titleFile"], random["title"])
 	
+	if not fileLeft:
+		print("Downloaded every file")
+	if not correctTimeRange:
+		print("It is not time to download")
 	# ~ print(myFile.getCustomTitle("15373.mkv"))
 	
 main()
