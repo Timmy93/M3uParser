@@ -41,3 +41,6 @@ htmlcov/
 
 #Ini settings
 *.ini
+
+#M3u Files
+*.m3u
