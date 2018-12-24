@@ -40,7 +40,7 @@ pip-delete-this-directory.txt
 htmlcov/
 
 #Ini settings
-#*.ini
+*.ini
 
 #M3u Files
 *.m3u
