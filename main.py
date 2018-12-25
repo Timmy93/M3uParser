@@ -7,7 +7,7 @@
 # Disclaimer:	
 
 from M3uParser import M3uParser
-from RememberFiles import RememberFiles
+from RememberFile import RememberFile
 import configparser
 import subprocess
 import os
@@ -96,7 +96,7 @@ def main():
 	# ~ renameAll(path)
 	# ~ 
 	
-	db = RememberFiles(db_path)
+	db = RememberFile(db_path)
 	fileLeft = len(myFile.getList())
 	correctTimeRange = time_in_range(start_time, end_time)
 	while fileLeft and correctTimeRange:

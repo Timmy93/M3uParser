@@ -8,7 +8,7 @@
 
 import os
 
-class RememberFiles:
+class RememberFile:
 	
 	def __init__(self, filename):
 		#Set filename
