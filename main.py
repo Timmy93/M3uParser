@@ -80,7 +80,11 @@ def main():
 	#Info for time range activity
 	start_time = config['Time']['start_time']
 	end_time = config['Time']['end_time']
-
+	
+	#Edit all path to absolute
+	dir_path = os.path.dirname(os.path.realpath(__file__))
+	downloader = dir_path+"/"+downloader
+	
 	#Start parser
 	myFile = M3uParser()
 	myFile.downloadM3u(url, filename)
