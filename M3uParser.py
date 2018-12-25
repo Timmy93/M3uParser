@@ -18,8 +18,9 @@ class M3uParser:
 	
 	#Download the file from the given url
 	def downloadM3u(self, url, filename):
+		dir_path = os.path.dirname(os.path.realpath(__file__))
 		if not filename:
-			filename = "test.m3u"
+			filename = dir_path+"test.m3u"
 		try:
 			urllib.request.urlretrieve(url, filename)
 		except:
