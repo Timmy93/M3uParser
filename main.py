@@ -92,8 +92,15 @@ def main():
 	#Set filters
 	myFile.filterOutFilesEndingWith(".ts")
 	myFile.filterOutFilesOfGroupsContaining("Film Sala")
+	myFile.filterOutFilesOfGroupsContaining("Graffette")
+	myFile.filterOutFilesOfGroupsContaining("Tv Show")
 	myFile.filterOutFilesOfGroupsContaining("Film Ultimi Inseriti Cam")
 	myFile.filterOutFilesOfGroupsContaining("3D")
+	myFile.filterOutFilesOfGroupsContaining("Tedeschi")
+	myFile.filterOutFilesOfGroupsContaining("Francesi")
+	myFile.filterOutFilesOfGroupsContaining("Serie TV")
+	myFile.filterOutFilesOfGroupsContaining("For Adults")
+	
 	
 	
 	#Debug
@@ -105,6 +112,7 @@ def main():
 	
 	db = RememberFile(db_path)
 	fileLeft = len(myFile.getList())
+	print("Film da scaricare: "+str(fileLeft))
 	correctTimeRange = time_in_range(start_time, end_time)
 	while fileLeft and correctTimeRange:
 		#Extract file
