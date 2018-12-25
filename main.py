@@ -52,7 +52,8 @@ def debugTypes(myFile):
 	
 def main():
 	dir_path = os.path.dirname(os.path.realpath(__file__))
-	iniFile = dir_path+"info.ini"
+	iniFile = dir_path+"/info.ini"
+	print(iniFile)
 	iniSample = "[Settings]\nurl=http://your/url/here\nfilename=IPTV.m3u"
 	#Read ini file
 	try:
