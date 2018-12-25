@@ -84,6 +84,7 @@ def main():
 	#Edit all path to absolute
 	dir_path = os.path.dirname(os.path.realpath(__file__))
 	downloader = dir_path+"/"+downloader
+	db_path = dir_path+"/"+db_path
 	
 	#Start parser
 	myFile = M3uParser()
