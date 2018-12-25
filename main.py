@@ -7,6 +7,7 @@
 # Disclaimer:	
 
 from M3uParser import M3uParser
+from RememberFiles import RememberFiles
 import configparser
 import subprocess
 import os
@@ -70,6 +71,7 @@ def main():
 	temp_path = config['Download']['temp_path']
 	completed = config['Download']['completed']
 	downloader = config['Download']['downloader']
+	db_path = config['Download']['db']
 	#Info for renaming
 	source_to_rename = config['Rename']['source_to_rename']
 	new_dir = config['Rename']['new_dir']
@@ -94,14 +96,21 @@ def main():
 	# ~ renameAll(path)
 	# ~ 
 	
+	db = RememberFiles(db_path)
 	fileLeft = len(myFile.getList())
 	correctTimeRange = time_in_range(start_time, end_time)
 	while fileLeft and correctTimeRange:
 		#Extract file
 		random = myFile.getRandomFile()
+		#Check if it is a new file
+		if db.isAlreadyDownloaded(random["title"]):
+			break
 		#Download file
 		if startDownload(downloader, random["link"], temp_path, completed):
+			#Move renamed file
 			rename(source_to_rename, new_dir, random["titleFile"], random["title"])
+			#Save that the file has been renamed
+			db.appendTitle(random["title"])
 	
 	if not fileLeft:
 		print("Downloaded every file")

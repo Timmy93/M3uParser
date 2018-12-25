@@ -44,3 +44,6 @@ htmlcov/
 
 #M3u Files
 *.m3u
+
+#DB
+*.db
