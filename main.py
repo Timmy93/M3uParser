@@ -64,7 +64,7 @@ def main():
 	configFile = "config.yml"
 	logFile = "M3uParser.log"
 	#Set logging file
-	logging.basicConfig(filename=createAbsolutePath(logFile),level=logging.DEBUG,format='%(asctime)s %(levelname)-8s %(message)s')
+	logging.basicConfig(filename=createAbsolutePath(logFile),level=logging.ERROR,format='%(asctime)s %(levelname)-8s %(message)s')
 	#Load config
 	with open(createAbsolutePath(configFile), 'r') as stream:
 		try:
@@ -72,7 +72,6 @@ def main():
 			#Info for m3u file
 			url = config['Settings']['url']
 			filename = config['Settings']['filename']
-			loggingEnabled = config['Settings']['loggingEnabled']
 			logLevel = config['Settings']['logLevel']
 			#Info for download
 			temp_path = createAbsolutePath(config['Download']['temp_path'])
@@ -85,6 +84,7 @@ def main():
 			#Info for time range activity
 			start_time = config['Time']['start_time']
 			end_time = config['Time']['end_time']
+			logging.getLogger().setLevel(logLevel)
 			logging.info('Loaded settings started')
 		except yaml.YAMLError as exc:
 			print("Cannot load file: ["+configFile+"] - Error: "+exc)
@@ -105,10 +105,10 @@ def main():
 	
 	#Create DB
 	db = RememberFile(db_path)
-	logging.info('DB file read and found')
+	logging.info('DB file found')
 	
 	fileLeft = len(myFile.getList())
-	logging.info("File left: "+str(fileLeft))
+	logging.info("File left after filtering: "+str(fileLeft))
 	correctTimeRange = time_in_range(start_time, end_time)
 	while fileLeft and correctTimeRange:
 		#Extract file
