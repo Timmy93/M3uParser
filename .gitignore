@@ -43,6 +43,9 @@ htmlcov/
 *.ini
 *.yml
 
+#Log files
+*.log
+
 #M3u Files
 *.m3u
 

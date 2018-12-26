@@ -12,7 +12,7 @@ import configparser
 import subprocess
 import os
 import datetime
-
+import logging
 import yaml
 
 #Rename all the file in this directory
@@ -62,13 +62,18 @@ def createAbsolutePath(path):
 		
 def main():
 	configFile = "config.yml"
-	
+	logFile = "M3uParser.log"
+	#Set logging file
+	logging.basicConfig(filename=createAbsolutePath(logFile),level=logging.DEBUG,format='%(asctime)s %(levelname)-8s %(message)s')
+	#Load config
 	with open(createAbsolutePath(configFile), 'r') as stream:
 		try:
 			config = yaml.load(stream)
 			#Info for m3u file
 			url = config['Settings']['url']
 			filename = config['Settings']['filename']
+			loggingEnabled = config['Settings']['loggingEnabled']
+			logLevel = config['Settings']['logLevel']
 			#Info for download
 			temp_path = createAbsolutePath(config['Download']['temp_path'])
 			completed = createAbsolutePath(config['Download']['completed'])
@@ -80,17 +85,16 @@ def main():
 			#Info for time range activity
 			start_time = config['Time']['start_time']
 			end_time = config['Time']['end_time']
-			
+			logging.info('Loaded settings started')
 		except yaml.YAMLError as exc:
-			print("Invalid conguration file.\nError: "+exc)
+			print("Cannot load file: ["+configFile+"] - Error: "+exc)
+			logging.error("Cannot load file: ["+configFile+"] - Error: "+exc)
 			exit()
-
-
 	
-    
 	#Start parser
 	myFile = M3uParser()
 	myFile.downloadM3u(url, filename)
+	logging.info('Downloaded m3u file')
 	#Set filters
 	#Remove extensions
 	for val in config['ExtensionFilterOut']['value']:
@@ -98,23 +102,20 @@ def main():
 	#Remove groups
 	for val in config['GroupFilterOut']['value']:
 		myFile.filterOutFilesOfGroupsContaining(val)
-
-	#Debug
-	# ~ debugTypes(myFile)
 	
-	#TODO
-	# ~ renameAll(path)
-	# ~ 
-	
+	#Create DB
 	db = RememberFile(db_path)
+	logging.info('DB file read and found')
+	
 	fileLeft = len(myFile.getList())
-	print("Film da scaricare: "+str(fileLeft))
+	logging.info("File left: "+str(fileLeft))
 	correctTimeRange = time_in_range(start_time, end_time)
 	while fileLeft and correctTimeRange:
 		#Extract file
 		random = myFile.getRandomFile()
 		#Check if it is a new file
 		if db.isAlreadyDownloaded(random["title"]):
+			logging.info("Skip file already downloaded: "+random["title"])
 			break
 		#Download file
 		if startDownload(downloader, random["link"], temp_path, completed):
@@ -122,11 +123,16 @@ def main():
 			rename(source_to_rename, new_dir, random["titleFile"], random["title"])
 			#Save that the file has been renamed
 			db.appendTitle(random["title"])
+			logging.info("Downloaded: "+random["title"])
+		else:
+			logging.warning("Problem downloading: ".random["title"])
 	
 	if not fileLeft:
 		print("Downloaded every file")
+		logging.info("STOP: No more file to download")
 	if not correctTimeRange:
 		print("It is not time to download")
-	# ~ print(myFile.getCustomTitle("15373.mkv"))
-	
+		logging.info("STOP: Out of download time range")
+		
+
 main()
