@@ -13,6 +13,8 @@ import subprocess
 import os
 import datetime
 
+import yaml
+
 #Rename all the file in this directory
 def rename(src, dst, oldName, newName):
 	filename, file_extension = os.path.splitext(oldName)
@@ -49,60 +51,54 @@ def debugTypes(myFile):
 		if old != now:
 			print(now)
 			old = now
-	
+
+#Check if the given path is an absolute path
+def createAbsolutePath(path):
+	if not os.path.isabs(path):
+		currentDir = os.path.dirname(os.path.realpath(__file__))
+		path = os.path.join(currentDir, path)
+		
+	return path
+		
 def main():
-	dir_path = os.path.dirname(os.path.realpath(__file__))
-	iniFile = dir_path+"/info.ini"
-	print(iniFile)
-	iniSample = "[Settings]\nurl=http://your/url/here\nfilename=IPTV.m3u"
-	#Read ini file
-	try:
-		config = configparser.ConfigParser()
-		config.read(iniFile)
-	except:
-		print("Created ini file - Update it!")
-		file = open(iniFile,"w") 
-		file.write(iniSample) 
-		file.close()
-		config = configparser.ConfigParser()
-		config.read(iniFile)
-	#Info for m3u file
-	url = config['Settings']['url']
-	filename = config['Settings']['filename']
-	#Info for download
-	temp_path = config['Download']['temp_path']
-	completed = config['Download']['completed']
-	downloader = config['Download']['downloader']
-	db_path = config['Download']['db']
-	#Info for renaming
-	source_to_rename = config['Rename']['source_to_rename']
-	new_dir = config['Rename']['new_dir']
-	#Info for time range activity
-	start_time = config['Time']['start_time']
-	end_time = config['Time']['end_time']
+	configFile = "config.yml"
 	
-	#Edit all path to absolute
-	dir_path = os.path.dirname(os.path.realpath(__file__))
-	downloader = dir_path+"/"+downloader
-	db_path = dir_path+"/"+db_path
+	with open(createAbsolutePath(configFile), 'r') as stream:
+		try:
+			config = yaml.load(stream)
+			#Info for m3u file
+			url = config['Settings']['url']
+			filename = config['Settings']['filename']
+			#Info for download
+			temp_path = createAbsolutePath(config['Download']['temp_path'])
+			completed = createAbsolutePath(config['Download']['completed'])
+			downloader = createAbsolutePath(config['Download']['downloader'])
+			db_path = createAbsolutePath(config['Download']['db'])
+			#Info for renaming
+			source_to_rename = createAbsolutePath(config['Rename']['source_to_rename'])
+			new_dir = createAbsolutePath(config['Rename']['new_dir'])
+			#Info for time range activity
+			start_time = config['Time']['start_time']
+			end_time = config['Time']['end_time']
+			
+		except yaml.YAMLError as exc:
+			print("Invalid conguration file.\nError: "+exc)
+			exit()
+
+
 	
+    
 	#Start parser
 	myFile = M3uParser()
 	myFile.downloadM3u(url, filename)
 	#Set filters
-	myFile.filterOutFilesEndingWith(".ts")
-	myFile.filterOutFilesOfGroupsContaining("Film Sala")
-	myFile.filterOutFilesOfGroupsContaining("Graffette")
-	myFile.filterOutFilesOfGroupsContaining("Tv Show")
-	myFile.filterOutFilesOfGroupsContaining("Film Ultimi Inseriti Cam")
-	myFile.filterOutFilesOfGroupsContaining("3D")
-	myFile.filterOutFilesOfGroupsContaining("Tedeschi")
-	myFile.filterOutFilesOfGroupsContaining("Francesi")
-	myFile.filterOutFilesOfGroupsContaining("Serie TV")
-	myFile.filterOutFilesOfGroupsContaining("For Adults")
-	
-	
-	
+	#Remove extensions
+	for val in config['ExtensionFilterOut']['value']:
+		myFile.filterOutFilesEndingWith(val)
+	#Remove groups
+	for val in config['GroupFilterOut']['value']:
+		myFile.filterOutFilesOfGroupsContaining(val)
+
 	#Debug
 	# ~ debugTypes(myFile)
 	

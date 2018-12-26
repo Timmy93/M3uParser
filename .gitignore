@@ -39,8 +39,9 @@ pip-delete-this-directory.txt
 # Unit test / coverage reports
 htmlcov/
 
-#Ini settings
+#Settings
 *.ini
+*.yml
 
 #M3u Files
 *.m3u

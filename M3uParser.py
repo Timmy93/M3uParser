@@ -18,10 +18,11 @@ class M3uParser:
 	
 	#Download the file from the given url
 	def downloadM3u(self, url, filename):
-		dir_path = os.path.dirname(os.path.realpath(__file__))
+		currentDir = os.path.dirname(os.path.realpath(__file__))
 		if not filename:
-			filename = dir_path+"/test.m3u"
+			filename = "test.m3u"
 		try:
+			filename = os.path.join(currentDir, filename)
 			urllib.request.urlretrieve(url, filename)
 		except:
 			print("Cannot download anything from the url\nHave you modified the ini file?")
