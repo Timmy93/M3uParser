@@ -103,11 +103,9 @@ def main():
 	for val in config['GroupFilterOut']['value']:
 		myFile.filterOutFilesOfGroupsContaining(val)
 	#Select extensions
-	for val in config['ExtensionFilterIn']['value']:
-		myFile.filterInFilesEndingWith(val)
+	myFile.filterInFilesEndingWith(config['ExtensionFilterIn']['value'])
 	#Select groups
-	for val in config['GroupFilterIn']['value']:
-		myFile.filterInFilesOfGroupsContaining(val)
+	myFile.filterInFilesOfGroupsContaining(config['GroupFilterIn']['value'])
 	
 	#Create DB
 	db = RememberFile(db_path)
