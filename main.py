@@ -120,7 +120,7 @@ def main():
 		#Check if it is a new file
 		if db.isAlreadyDownloaded(random["title"]):
 			logging.info("Skip file already downloaded: "+random["title"])
-			break
+			continue
 		#Download file
 		if startDownload(downloader, random["link"], temp_path, completed):
 			#Move renamed file
