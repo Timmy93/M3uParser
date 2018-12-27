@@ -92,7 +92,7 @@ def main():
 			exit()
 	
 	#Start parser
-	myFile = M3uParser()
+	myFile = M3uParser(logging)
 	myFile.downloadM3u(url, filename)
 	logging.info('Downloaded m3u file')
 	#Set filters

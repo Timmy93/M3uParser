@@ -13,8 +13,9 @@ import random
 
 class M3uParser:
 	
-	def __init__(self):
+	def __init__(self, logging):
 		self.files = []
+		self.logging = logging
 	
 	#Download the file from the given url
 	def downloadM3u(self, url, filename):
@@ -89,7 +90,7 @@ class M3uParser:
 		if not isinstance(extension, list):
 			extension = [extension]
 		if not len(extension):
-			logging.info("No filter in based on extensions")
+			self.logging.info("No filter in based on extensions")
 		new = []
 		#Iterate over all files and extensions
 		for file in self.files:	
@@ -98,7 +99,7 @@ class M3uParser:
 					#Allowed extension - go to next file
 					new.append(file)
 					break
-		logging.info("Filter in based on extension: ["+",".join(extension)+"]")
+		self.logging.info("Filter in based on extension: ["+",".join(extension)+"]")
 		self.files = new
 	
 	#Remove files that contains a certain filterWord
@@ -111,7 +112,7 @@ class M3uParser:
 		if not isinstance(filterWord, list):
 			filterWord = [filterWord]
 		if not len(filterWord):
-			logging.info("No filter in based on groups")
+			self.logging.info("No filter in based on groups")
 			return
 		new = []
 		for file in self.files:
@@ -120,7 +121,7 @@ class M3uParser:
 					#Allowed extension - go to next file
 					new.append(file)
 					break
-		logging.info("Filter in based on groups: ["+",".join(filterWord)+"]")
+		self.logging.info("Filter in based on groups: ["+",".join(filterWord)+"]")
 		self.files = new
 
 	#Getter for the list
