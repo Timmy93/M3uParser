@@ -116,10 +116,8 @@ def main():
 	correctTimeRange = time_in_range(start_time, end_time)
 	while fileLeft and correctTimeRange:
 		#Extract file
-		if config['Download']['shuffle']:
-			file = myFile.getRandomFile()
-		else:
-			file = myFile.pop()
+		file = myFile.getFile(config['Download']['shuffle'])
+
 		#Check if it is a new file
 		if db.isAlreadyDownloaded(file["title"]):
 			logging.info("Skip file already downloaded: "+file["title"])

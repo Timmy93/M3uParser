@@ -138,6 +138,7 @@ class M3uParser:
 			print("No file corresponding to: "+originalName)
 
 	#Return a random element
-	def getRandomFile(self):
-		random.shuffle(self.files)
+	def getFile(self, randomShuffle):
+		if randomShuffle:
+			random.shuffle(self.files)
 		return self.files.pop()
