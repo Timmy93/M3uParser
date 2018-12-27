@@ -113,8 +113,8 @@ def main():
 	
 	fileLeft = len(myFile.getList())
 	logging.info("File left after filtering: "+str(fileLeft))
-	correctTimeRange = time_in_range(start_time, end_time)
-	while fileLeft and correctTimeRange:
+
+	while fileLeft and time_in_range(start_time, end_time):
 		#Extract file
 		file = myFile.getFile(config['Download']['shuffle'])
 
