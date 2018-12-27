@@ -141,4 +141,7 @@ class M3uParser:
 	def getFile(self, randomShuffle):
 		if randomShuffle:
 			random.shuffle(self.files)
+		if not len(self.files):
+			self.logging.error("No files in the array, cannot extract anything")
+			return None
 		return self.files.pop()

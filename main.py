@@ -111,10 +111,8 @@ def main():
 	db = RememberFile(db_path)
 	logging.info('DB file found')
 	
-	fileLeft = len(myFile.getList())
-	logging.info("File left after filtering: "+str(fileLeft))
-
-	while fileLeft and time_in_range(start_time, end_time):
+	logging.info("File left after filtering: "+str(len(myFile.getList())))
+	while len(myFile.getList()) and time_in_range(start_time, end_time):
 		#Extract file
 		file = myFile.getFile(config['Download']['shuffle'])
 
@@ -132,7 +130,7 @@ def main():
 		else:
 			logging.warning("Problem downloading: ".file["title"])
 	
-	if not fileLeft:
+	if not len(myFile.getList()):
 		print("Downloaded every file")
 		logging.info("STOP: No more file to download")
 	elif not time_in_range(start_time, end_time):
