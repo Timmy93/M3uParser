@@ -91,6 +91,7 @@ class M3uParser:
 			extension = [extension]
 		if not len(extension):
 			self.logging.info("No filter in based on extensions")
+			return
 		new = []
 		#Iterate over all files and extensions
 		for file in self.files:	
