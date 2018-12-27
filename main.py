@@ -116,20 +116,23 @@ def main():
 	correctTimeRange = time_in_range(start_time, end_time)
 	while fileLeft and correctTimeRange:
 		#Extract file
-		random = myFile.getRandomFile()
+		if config['Download']['shuffle']:
+			file = myFile.getRandomFile()
+		else:
+			file = myFile.pop()
 		#Check if it is a new file
-		if db.isAlreadyDownloaded(random["title"]):
-			logging.info("Skip file already downloaded: "+random["title"])
+		if db.isAlreadyDownloaded(file["title"]):
+			logging.info("Skip file already downloaded: "+file["title"])
 			continue
 		#Download file
-		if startDownload(downloader, random["link"], temp_path, completed):
+		if startDownload(downloader, file["link"], temp_path, completed):
 			#Move renamed file
-			rename(source_to_rename, new_dir, random["titleFile"], random["title"])
+			rename(source_to_rename, new_dir, file["titleFile"], file["title"])
 			#Save that the file has been renamed
-			db.appendTitle(random["title"])
-			logging.info("Downloaded: "+random["title"])
+			db.appendTitle(file["title"])
+			logging.info("Downloaded: "+file["title"])
 		else:
-			logging.warning("Problem downloading: ".random["title"])
+			logging.warning("Problem downloading: ".file["title"])
 	
 	if not fileLeft:
 		print("Downloaded every file")
