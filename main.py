@@ -102,6 +102,12 @@ def main():
 	#Remove groups
 	for val in config['GroupFilterOut']['value']:
 		myFile.filterOutFilesOfGroupsContaining(val)
+	#Select extensions
+	for val in config['ExtensionFilterIn']['value']:
+		myFile.filterInFilesEndingWith(val)
+	#Select groups
+	for val in config['GroupFilterIn']['value']:
+		myFile.filterInFilesOfGroupsContaining(val)
 	
 	#Create DB
 	db = RememberFile(db_path)

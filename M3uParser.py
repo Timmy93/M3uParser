@@ -83,9 +83,17 @@ class M3uParser:
 	def filterOutFilesEndingWith(self, extension):
 		self.files = list(filter(lambda file: not file["titleFile"].endswith(extension), self.files))
 	
+	#Select only files with a certain file extension
+	def filterINFilesEndingWith(self, extension):
+		self.files = list(filter(lambda file: file["titleFile"].endswith(extension), self.files))
+	
 	#Remove files that contains a certain filterWord
 	def filterOutFilesOfGroupsContaining(self, filterWord):
 		self.files = list(filter(lambda file: filterWord not in file["tvg-group"], self.files))
+
+	#Select only files that contais a certain filterWord
+	def filterInFilesOfGroupsContaining(self, filterWord):
+		self.files = list(filter(lambda file: filterWord in file["tvg-group"], self.files))
 
 	#Getter for the list
 	def getList(self):
