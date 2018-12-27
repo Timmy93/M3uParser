@@ -130,9 +130,10 @@ def main():
 	if not fileLeft:
 		print("Downloaded every file")
 		logging.info("STOP: No more file to download")
-	if not correctTimeRange:
+	elif not correctTimeRange:
 		print("It is not time to download")
 		logging.info("STOP: Out of download time range")
-		
+	else:
+		logging.warning("STOP: Unexpected stop")	
 
 main()
