@@ -122,11 +122,14 @@ def main():
 			continue
 		#Download file
 		if startDownload(downloader, file["link"], temp_path, completed):
-			#Move renamed file
-			rename(source_to_rename, new_dir, file["titleFile"], file["title"])
-			#Save that the file has been renamed
-			db.appendTitle(file["title"])
-			logging.info("Downloaded: "+file["title"])
+			try:
+				#Move renamed file
+				rename(source_to_rename, new_dir, file["titleFile"], file["title"])
+				#Save that the file has been renamed
+				db.appendTitle(file["title"])
+				logging.info("Downloaded: "+file["title"])
+			except FileNotFoundError:
+				logging.error("Error: No file found, "+file["titleFile"]+" ("+file["titleFile"]+") not found")
 		else:
 			logging.warning("Problem downloading: "+file["title"])
 	
