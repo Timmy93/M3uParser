@@ -128,7 +128,7 @@ def main():
 			db.appendTitle(file["title"])
 			logging.info("Downloaded: "+file["title"])
 		else:
-			logging.warning("Problem downloading: ".file["title"])
+			logging.warning("Problem downloading: "+file["title"])
 	
 	if not len(myFile.getList()):
 		print("Downloaded every file")
