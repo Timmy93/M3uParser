@@ -118,7 +118,7 @@ def main():
 
 		#Check if it is a new file
 		if db.isAlreadyDownloaded(file["title"]):
-			logging.info("Skip file already downloaded: "+file["title"])
+			logging.debug("Skip file already downloaded: "+file["title"])
 			continue
 		#Download file
 		if startDownload(downloader, file["link"], temp_path, completed):
