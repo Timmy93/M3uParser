@@ -131,7 +131,7 @@ def main():
 			except FileNotFoundError:
 				logging.error("Error: No file found, "+file["titleFile"]+" ("+file["titleFile"]+") not found")
 		else:
-			logging.warning("Problem downloading: "+file["title"])
+			logging.warning("Problem downloading: "+file["title"]+" - No time to download or no space in the disk")
 	
 	if not len(myFile.getList()):
 		print("Downloaded every file")
