@@ -2,7 +2,7 @@
 dir_temp=$2
 dir_finished=$3
 cd $dir_temp
-for i in `seq 1 30`; do
+for i in `seq 1 40`; do
   timeout 15 curl -O -J -L -C - $1
   res=$?
   if test "$res" != "0"; then
