@@ -69,22 +69,7 @@ def main():
 	with open(createAbsolutePath(configFile), 'r') as stream:
 		try:
 			config = yaml.load(stream)
-			#Info for m3u file
-			url = config['Settings']['url']
-			filename = config['Settings']['filename']
-			logLevel = config['Settings']['logLevel']
-			#Info for download
-			temp_path = createAbsolutePath(config['Download']['temp_path'])
-			completed = createAbsolutePath(config['Download']['completed'])
-			downloader = createAbsolutePath(config['Download']['downloader'])
-			db_path = createAbsolutePath(config['Download']['db'])
-			#Info for renaming
-			source_to_rename = createAbsolutePath(config['Rename']['source_to_rename'])
-			new_dir = createAbsolutePath(config['Rename']['new_dir'])
-			#Info for time range activity
-			start_time = config['Time']['start_time']
-			end_time = config['Time']['end_time']
-			logging.getLogger().setLevel(logLevel)
+			logging.getLogger().setLevel(config['Settings']['logLevel'])
 			logging.info('Loaded settings started')
 		except yaml.YAMLError as exc:
 			print("Cannot load file: ["+configFile+"] - Error: "+exc)
@@ -93,7 +78,7 @@ def main():
 	
 	#Start parser
 	myFile = M3uParser(logging)
-	myFile.downloadM3u(url, filename)
+	myFile.downloadM3u(config['Settings']['url'], config['Settings']['filename'])
 	logging.info('Downloaded m3u file')
 	#Set filters
 	#Remove extensions
@@ -108,11 +93,14 @@ def main():
 	myFile.filterInFilesOfGroupsContaining(config['GroupFilterIn']['value'])
 	
 	#Create DB
-	db = RememberFile(db_path)
+	db = RememberFile(createAbsolutePath(config['Download']['db']))
 	logging.info('DB file found')
 	
 	logging.info("File left after filtering: "+str(len(myFile.getList())))
-	while len(myFile.getList()) and time_in_range(start_time, end_time):
+	while len(myFile.getList()) and time_in_range(
+		config['Time']['start_time'], 
+		config['Time']['end_time']
+	):
 		#Extract file
 		file = myFile.getFile(config['Download']['shuffle'])
 
@@ -121,10 +109,20 @@ def main():
 			logging.debug("Skip file already downloaded: "+file["title"])
 			continue
 		#Download file
-		if startDownload(downloader, file["link"], temp_path, completed):
+		if startDownload(
+			createAbsolutePath(config['Download']['downloader']), 
+			file["link"], 
+			createAbsolutePath(config['Download']['temp_path']), 
+			createAbsolutePath(config['Download']['completed'])
+		):
 			try:
 				#Move renamed file
-				rename(source_to_rename, new_dir, file["titleFile"], file["title"])
+				rename(
+					createAbsolutePath(config['Rename']['source_to_rename']), 
+					createAbsolutePath(config['Rename']['new_dir']), 
+					file["titleFile"], 
+					file["title"]
+				)
 				#Save that the file has been renamed
 				db.appendTitle(file["title"])
 				logging.info("Downloaded: "+file["title"])
@@ -136,7 +134,10 @@ def main():
 	if not len(myFile.getList()):
 		print("Downloaded every file")
 		logging.info("STOP: No more file to download")
-	elif not time_in_range(start_time, end_time):
+	elif not time_in_range(
+		config['Time']['start_time'], 
+		config['Time']['end_time']
+	):
 		print("It is not time to download")
 		logging.info("STOP: Out of download time range")
 	else:

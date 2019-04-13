@@ -61,7 +61,7 @@ class M3uParser:
 			logo = m.group(1)
 			m = re.search("group-title=\"(.*?)\"", lineInfo)
 			group = m.group(1)
-			m = re.search(",(.*?)$", lineInfo)
+			m = re.search("[,](?!.*[,])(.*?)$", lineInfo)
 			title = m.group(1)
 			# ~ print(name+"||"+id+"||"+logo+"||"+group+"||"+title)
 			
