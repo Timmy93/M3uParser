@@ -68,7 +68,7 @@ def main():
 	#Load config
 	with open(createAbsolutePath(configFile), 'r') as stream:
 		try:
-			config = yaml.load(stream)
+			config = yaml.safe_load(stream)
 			logging.getLogger().setLevel(config['Settings']['logLevel'])
 			logging.info('Loaded settings started')
 		except yaml.YAMLError as exc:
