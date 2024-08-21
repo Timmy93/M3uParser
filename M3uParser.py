@@ -26,6 +26,7 @@ class M3uParser:
 			filename = os.path.join(currentDir, filename)
 			urllib.request.urlretrieve(url, filename)
 		except:
+			self.logging.error("Cannot download anything from the url ["+str(url)+"] - Have you modified the ini file?")
 			print("Cannot download anything from the url\nHave you modified the ini file?")
 			exit()
 		self.readM3u(filename)
@@ -66,14 +67,15 @@ class M3uParser:
 			# ~ print(name+"||"+id+"||"+logo+"||"+group+"||"+title)
 			
 			test = {
-				"title": title,
-				"tvg-name": name,
+				"title": self.stripIllegalChar(title),
+				"tvg-name": self.stripIllegalChar(name),
 				"tvg-ID": id,
 				"tvg-logo": logo,
 				"tvg-group": group,
 				"titleFile": os.path.basename(lineLink),
 				"link": lineLink
 			}
+			print(test)
 			self.files.append(test)
 			
 	def exportJson(self):
@@ -145,3 +147,10 @@ class M3uParser:
 			self.logging.error("No files in the array, cannot extract anything")
 			return None
 		return self.files.pop()
+
+	#Remove illegal char filename char
+	def stripIllegalChar(self, string):
+		illegal = ['NUL','/','\\','\'',':','*','"','<','>','|']
+		for i in illegal:
+			string = string.replace(i, '')
+		return string

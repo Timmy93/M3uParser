@@ -1,0 +1,34 @@
+Settings:
+  url: "https://mysite.ddns.net:80/get.php?username=my_name&password=my_password&type=m3u_plus&output=ts"
+  filename: "IPTV.m3u"
+  logLevel: "INFO"
+  
+Download:
+  temp_path: "/tmp/in_progress/"
+  completed: "/tmp/complete/"
+  downloader: "newDownloader.sh"
+  db: "alreadyDownloaded.db"
+  shuffle: false
+
+Rename:
+  source_to_rename: "tmp/complete/"
+  new_dir: "/home/my_user/IPTV_Download/"
+
+Time:
+  start_time: "2:00"
+  end_time: "8:00"
+
+#Used to define the filter on the extension of the file
+ExtensionFilterOut:
+  value: [".ts"]
+
+ExtensionFilterIn:
+  value: []
+
+#Used to define the filter on the group
+GroupFilterOut:
+  value: ["Movie", "Documentaries"]
+
+GroupFilterIn:
+  value: ["TV Show"]
+
